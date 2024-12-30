@@ -1,14 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState, useEffect, useContext } from 'react'
 
 export default function App() {
   const [count, setCount] = useState(0)
   const [minutes, setMinutes] = useState(25)
   const [seconds, setSeconds] = useState(0)
-  const [time, setTime] = useState("")
+  const [time, setTime] = useState("25:00")
   const [isFlowing, setIsFlowing] = useState(true)
-  const [isStopped, setIsStopped] = useState(false)
+  const [isStopped, setIsStopped] = useState(true)
 
   const timeIsOver = () => {
     setIsFlowing(!isFlowing)
@@ -26,6 +26,10 @@ export default function App() {
     return result
   }
 
+  const buttonPress = () => {
+    setIsStopped(!isStopped)
+  }
+
   const tick = () => {
     if (minutes === 0 & seconds === 0) {
       timeIsOver()
@@ -40,18 +44,22 @@ export default function App() {
   }
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCount(count + 1)
-    }, 1000)
-    console.log(count);
-    tick()
-    formatTime()
-    return () => clearInterval(intervalId);
-  }, [count])
+    if (!isStopped) {
+      const intervalId = setInterval(() => {
+        setCount(count + 1)
+      }, 1000)
+      console.log(count);
+      tick()
+      formatTime()
+      return () => clearInterval(intervalId);
+    }
+  }, [count, isStopped])
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!{count}</Text>
-      <Text>{time}</Text>
+      <TouchableOpacity onPress={() => buttonPress()} style={styles.button}>
+        <Text>{isStopped ? "Start" : "Pause"}</Text>
+        <Text>{time}</Text>
+      </TouchableOpacity>
       <StatusBar style="auto" />
     </View>
   );
@@ -64,4 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    backgroundColor: 'green'
+  }
 });
