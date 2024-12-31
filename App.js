@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Vibration } from 'react-native';
+import { Audio } from 'expo-av';
 import React, { useState, useEffect, useContext } from 'react'
 import CircularProgress from 'react-native-circular-progress-indicator';
 
@@ -14,9 +15,28 @@ export default function App() {
   const [isPaused, setIsPaused] = useState(false)
   const [isStopped, setIsStopped] = useState(true)
 
+  const playBeep = async () => {
+    try {
+      const { sound } = await Audio.Sound.createAsync(
+        require('./assets/beep.mp3') // Update the path to your beep sound file
+      );
+      await sound.playAsync();
+      // Unload the sound after playback to free resources
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          sound.unloadAsync();
+        }
+      });
+    } catch (error) {
+      console.error('Error playing sound:', error);
+    }
+  }
+
   const timeIsOver = () => {
     // gambiarra
     setIsPaused(!isPaused)
+    Vibration.vibrate(3000)
+    playBeep()
     if (isPaused) {
       setMinutes(defaultWorkMinutes)
     }
@@ -100,10 +120,16 @@ const styles = StyleSheet.create({
     color: 'green',
     display: 'flex',
     fontWeight: 'bold',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center'
   },
   subtitle: {
     color: '#2ecc71',
     fontSize: 15,
-    display: 'flex'
+    display: 'flex',
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center'
   },
 });
