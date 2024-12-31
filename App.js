@@ -50,7 +50,7 @@ export default function App() {
     const result = `${minutes < 10 ? "0" + minutes : minutes }:${seconds < 10 ? "0" + seconds : seconds}`
     setTime(result)
     const workMinutesPercent = (((minutes * 60) + seconds) * 100) / (isPaused === false ? 60 * defaultWorkMinutes : 60 * defaultPauseMinutes)
-    setTimePercent(Math.floor(workMinutesPercent))
+    setTimePercent(workMinutesPercent.toFixed(2)) // alternative Math.floor()
     return result
   }
 
@@ -88,18 +88,24 @@ export default function App() {
     <View style={styles.container}>
       <TouchableOpacity onPress={() => buttonPress()} style={styles.button}>
         <CircularProgress
+          radius={120}
           value={timePercent}
+          titleColor={isStopped ? '#ad1a1f' :'#1ab85e'}
+          subtitleColor={isStopped ? '#78191c' : '#10572f'}
+          inActiveStrokeWidth={40}
+          activeStrokeWidth={20}
           showProgressValue={false}
           subtitle={isStopped === true ? "Start" : "Pause"}
           subtitleStyle={styles.subtitle}
           title={time}
           titleStyle={styles.title}
-          inActiveStrokeColor={isStopped ? 'red' : '#2ecc71'}
+          inActiveStrokeColor={isStopped ? 'red' : '#2465FD'}
           inActiveStrokeOpacity={0.2}
-          activeStrokeColor={isStopped ? 'red': '#2ecc71'}
+          activeStrokeColor={isStopped ? '#d9141a': '#2465FD'}
+          circleBackgroundColor='rgba(30, 33, 63, 1)'
+          activeStrokeSecondaryColor={isStopped ? '#a63a3e' : '#C25AFF'}
         />
       </TouchableOpacity>
-
       <StatusBar style="auto" />
     </View>
   );
@@ -108,16 +114,15 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#1E213F',
     alignItems: 'center',
     justifyContent: 'center',
   },
   button: {
-    backgroundColor: '#fff'
+    backgroundColor: '#1E213F'
   },
   title: {
-    fontSize: 20,
-    color: 'green',
+    fontSize: 45,
     display: 'flex',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -125,8 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   subtitle: {
-    color: '#2ecc71',
-    fontSize: 15,
+    fontSize: 25,
     display: 'flex',
     textAlign: 'center',
     display: 'flex',
