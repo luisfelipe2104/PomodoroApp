@@ -56,6 +56,7 @@ export default function App() {
 
   const buttonPress = () => {
     setIsStopped(!isStopped)
+    Vibration.vibrate(100)
   }
 
   const tick = () => {
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 25,
     display: 'flex',
+    fontStyle: 'italic',
     textAlign: 'center',
     display: 'flex',
     justifyContent: 'center'
