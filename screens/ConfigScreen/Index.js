@@ -1,20 +1,36 @@
-import { View, Text, StyleSheet } from "react-native";
+import { Container, ButtonContainer, Button, ButtonText, Title, Subtitle } from "../../components/ConfigComponents";
 
 function ConfigScreen() {
     return ( 
-        <View style={styles.container}>
-            <Text>Config Screen</Text>
-        </View>  // or return your component here
+        <Container>
+            <Title>Configuration</Title>
+            <Subtitle>Long Periods</Subtitle>
+            <ButtonContainer>
+                <Button style={{backgroundColor: '#1ab85e'}}>
+                    <ButtonText>25 | 5</ButtonText>
+                </Button>
+                <Button>
+                    <ButtonText>30 | 5</ButtonText>
+                </Button>
+                <Button>
+                    <ButtonText>35 | 5</ButtonText>
+                </Button>
+            </ButtonContainer>
+
+            <Subtitle>Short Periods</Subtitle>
+            <ButtonContainer>
+                <Button>
+                    <ButtonText>15 | 3</ButtonText>
+                </Button>
+                <Button>
+                    <ButtonText>10 | 3</ButtonText>
+                </Button>
+                <Button>
+                    <ButtonText>5 | 2</ButtonText>
+                </Button>
+            </ButtonContainer>
+        </Container>  // or return your component here
      );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#1E213F',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-})
 
 export default ConfigScreen;
