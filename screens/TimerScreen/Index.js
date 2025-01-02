@@ -60,7 +60,7 @@ export default function TimerScreen({ navigation }) {
   }
 
   const onLongPressButton = () => {
-    setIsStopped(!isStopped)
+    setIsStopped(true)
     Vibration.vibrate(100)
     navigation.navigate("Config")
   }
