@@ -3,11 +3,11 @@ import { StyleSheet, View, TouchableOpacity, Vibration } from 'react-native';
 import { Audio } from 'expo-av';
 import React, { useState, useEffect, useContext } from 'react'
 import CircularProgress from 'react-native-circular-progress-indicator';
+import { DataContext } from '../../contexts/DataContext';
 
 export default function TimerScreen({ navigation }) {
+  const { defaultWorkMinutes, defaultPauseMinutes } = useContext(DataContext)
   const [count, setCount] = useState(0)
-  const [defaultWorkMinutes, setDefaultWorkMinutes] = useState(25)
-  const [defaultPauseMinutes, setDefaultPauseMinutes] = useState(5)
   const [minutes, setMinutes] = useState(defaultWorkMinutes)
   const [seconds, setSeconds] = useState(0)
   const [timePercent, setTimePercent] = useState(100)
