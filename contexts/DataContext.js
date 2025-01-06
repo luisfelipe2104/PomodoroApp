@@ -5,29 +5,38 @@ import * as SecureStore from 'expo-secure-store';
 export const DataContext = createContext();
 
 export function DataProvider({ children }) {
-    const [defaultWorkMinutes, setDefaultWorkMinutes] = useState(25)
-    const [defaultPauseMinutes, setDefaultPauseMinutes] = useState(5)
+    const [defaultWorkMinutes, setDefaultWorkMinutes] = useState(null)
+    const [defaultPauseMinutes, setDefaultPauseMinutes] = useState(null)
     
     async function getDataInformation() {
-      let dfwm = await SecureStore.getItemAsync('defaultWorkMinutes');
-      let dfpm = await SecureStore.getItemAsync('defaultPauseMinutes');
+      const dfwm = await SecureStore.getItemAsync('defaultWorkMinutes');
+      const dfpm = await SecureStore.getItemAsync('defaultPauseMinutes');
   
-      if (dfwm != null & dfpm != null) {
-        setDefaultWorkMinutes(parseInt(dfwm));
-        setDefaultPauseMinutes(parseInt(dfpm))
-        console.log("ok");
-      } else {
-        setDefaultWorkMinutes(25);
-        setDefaultPauseMinutes(5)
-        await SecureStore.setItemAsync("defaultWorkMinutes", '25')
-        await SecureStore.setItemAsync("defaultPauseMinutes", '5')
-        console.log('not ok');
+      if (dfwm === null & dfpm === null) {
+          setDefaultWorkMinutes(25);
+          setDefaultPauseMinutes(5)
+          await SecureStore.setItemAsync("defaultWorkMinutes", '25')
+          await SecureStore.setItemAsync("defaultPauseMinutes", '5')
+          console.log('not ok');
+    } else {
+          setDefaultWorkMinutes(parseInt(dfwm));
+          setDefaultPauseMinutes(parseInt(dfpm))
+          console.log("ok");
+          console.log(dfwm);
       }
     }
 
     useEffect(() => {
         getDataInformation()
     }, [])
+
+    useEffect(() => {
+        const main = async () => {
+            await SecureStore.setItemAsync("defaultWorkMinutes", defaultWorkMinutes)
+            await SecureStore.setItemAsync("defaultPauseMinutes", defaultPauseMinutes)
+        }
+        main()
+    }, [defaultWorkMinutes, defaultPauseMinutes])
 
   return (
     <DataContext.Provider

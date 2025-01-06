@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, TouchableOpacity, Vibration } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Vibration, Text } from 'react-native';
 import { Audio } from 'expo-av';
 import React, { useState, useEffect, useContext } from 'react'
 import CircularProgress from 'react-native-circular-progress-indicator';
@@ -11,7 +11,6 @@ export default function TimerScreen({ navigation }) {
   const [minutes, setMinutes] = useState(defaultWorkMinutes)
   const [seconds, setSeconds] = useState(0)
   const [timePercent, setTimePercent] = useState(100)
-  const [time, setTime] = useState(`${defaultWorkMinutes}:00`)
   const [isPaused, setIsPaused] = useState(false)
   const [isStopped, setIsStopped] = useState(true)
 
@@ -43,15 +42,6 @@ export default function TimerScreen({ navigation }) {
     else if (!isPaused) {
       setMinutes(defaultPauseMinutes)
     }
-
-  }
-
-  const formatTime = () => {
-    const result = `${minutes < 10 ? "0" + minutes : minutes }:${seconds < 10 ? "0" + seconds : seconds}`
-    setTime(result)
-    const workMinutesPercent = (((minutes * 60) + seconds) * 100) / (isPaused === false ? 60 * defaultWorkMinutes : 60 * defaultPauseMinutes)
-    setTimePercent(workMinutesPercent.toFixed(2)) // alternative Math.floor()
-    return result
   }
 
   const buttonPress = () => {
@@ -76,6 +66,9 @@ export default function TimerScreen({ navigation }) {
     else {
       setSeconds(seconds - 1)
     }
+    // sets the percent
+    const workMinutesPercent = (((minutes * 60) + seconds) * 100) / (isPaused === false ? 60 * defaultWorkMinutes : 60 * defaultPauseMinutes)
+    setTimePercent(workMinutesPercent.toFixed(2)) // alternative Math.floor()
   }
 
   useEffect(() => {
@@ -87,10 +80,15 @@ export default function TimerScreen({ navigation }) {
       console.log(isPaused);
       console.log(timePercent);
       tick()
-      formatTime()
       return () => clearInterval(intervalId);
     }
   }, [count, isStopped])
+
+  useEffect(() => {
+    setMinutes(defaultWorkMinutes)
+    
+  }, [defaultWorkMinutes, defaultPauseMinutes])
+
   return (
     <View style={styles.container}>
       <TouchableOpacity onLongPress={() => onLongPressButton()} onPress={() => buttonPress()} style={styles.button}>
@@ -104,7 +102,7 @@ export default function TimerScreen({ navigation }) {
           showProgressValue={false}
           subtitle={isStopped === true ? "Start" : "Pause"}
           subtitleStyle={styles.subtitle}
-          title={time}
+          title={`${minutes < 10 ? "0" + minutes : minutes }:${seconds < 10 ? "0" + seconds : seconds}`}
           titleStyle={styles.title}
           inActiveStrokeColor={isStopped ? 'red' : '#2465FD'}
           inActiveStrokeOpacity={0.2}
