@@ -32,10 +32,11 @@ export function DataProvider({ children }) {
 
     useEffect(() => {
         const main = async () => {
-            await SecureStore.setItemAsync("defaultWorkMinutes", defaultWorkMinutes)
-            await SecureStore.setItemAsync("defaultPauseMinutes", defaultPauseMinutes)
+            await SecureStore.setItemAsync("defaultWorkMinutes",  String(defaultWorkMinutes))
+            await SecureStore.setItemAsync("defaultPauseMinutes", String(defaultPauseMinutes))
         }
         main()
+        console.log("updated!!!");
     }, [defaultWorkMinutes, defaultPauseMinutes])
 
   return (
