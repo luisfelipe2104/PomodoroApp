@@ -34,7 +34,7 @@ export default function TimerScreen({ navigation }) {
   const timeIsOver = () => {
     // gambiarra
     setIsPaused(!isPaused)
-    Vibration.vibrate(3000)
+    Vibration.vibrate(1500)
     playBeep()
     if (isPaused) {
       setMinutes(defaultWorkMinutes)
